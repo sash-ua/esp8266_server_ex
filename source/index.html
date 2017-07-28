@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IOT humidity control</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="common.css">
+</head>
+<body>
+<div id="errors" class="info hide anim decor"></div>
+<div class="hidden hide anim"  id="auth">
+    <form class="info auth anim" name="auth" id="auth_form">
+        <label id="auth__ssid" for="auth__login">LogIn (length 1-32 letter, digit or underscore)</label>
+        <input class="auth auth__login" id="auth__login" required autofocus pattern="\w{1,32}">
+        <label for="auth__pass">Password (8-64 letter, digit or underscore)</label>
+        <input class="auth auth__pass" id="auth__pass" type="password" required pattern="\w{8,64}">
+        <input class="auth auth__send" id="auth__sbmt" type="submit" value="Go">
+    </form>
+</div>
+<div class="hidden hide anim" id="main">
+    <div class="info crdntl anim">
+        <div class="info">Change credentials</div>
+        <input id="change__ap" class="input" type="submit" value="Access point">
+        <input id="change__auth" class="input" type="submit" value="Authorization">
+    </div>
+    <div class="info info__ip">
+        <div class="it"> IP: <span id="ip"></span></div>
+        <div class="it"> MAC: <span id="mac"></span></div>
+    </div>
+    <div class="info info__sensor-data">
+        <div class="it"> Relative humidity: <span id="rh"></span> %</div>
+        <div class="it"> Temperature: <span id="temp"></span> C</div>
+        <div class="it"> Dew point: <span id="dp"></span> C</div>
+        <div class="it"> Radiator's temperature: <span id="rt"></span> C</div>
+    </div>
+    <form name="set_rh" class="info info__set-rh">
+        <div class="it"> Target relative humidity (TRH): <span id="trh"></span> %</div>
+        <label class="it" for="aim">Set new TRH(%):</label>
+        <div class="rel">
+            <span id="vldtMsg" class="info hide info__wndw_valid anim"></span>
+            <input class="it" id="aim" type="number" min="0" max="100" name="trh" required>
+            <input class="it it__btn" id="set-trh" type="button" value="Set">
+        </div>
+    </form>
+</div>
+<script type="text/javascript" src="main.js"></script>
+</body>
+</html>
+

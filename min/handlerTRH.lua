@@ -1,0 +1,1 @@
+function handlerTRH(a)node.egc.setmode(node.egc.ALWAYS)local b=readFile(a)if b then local c=sjson.decode(b)if c.trh then b=nil;return c.trh else c.trh=50;writeFile(a,c)return 50 end else writeFile(a,{trh=50})return 50 end end

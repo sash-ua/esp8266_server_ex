@@ -1,0 +1,1 @@
+function updateCash(a,b,c,d)if d then local e=sjson.decode(d)local f=e[c]if f then b[c]=f;local g=writeFile(a,b)if g then e,g=nil,nil;return sjson.encode(b)else e,g=nil,nil;return false end;e=nil;return sjson.encode(b)else return sjson.encode(b)end else return sjson.encode(b)end end

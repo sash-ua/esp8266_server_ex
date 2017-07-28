@@ -1,0 +1,1 @@
+function managerGpio(a)local b=tonumber(a.trh)if a.rh>=b and a.rt>=a.dp-2 then setGpioPin(2,gpio.OUTPUT,gpio.LOW)elseif a.rh>=b and a.rt<=a.dp-2 then setGpioPin(2,gpio.OUTPUT,gpio.HIGH)elseif a.rh<b-2 then setGpioPin(2,gpio.OUTPUT,gpio.HIGH)end;b,a=nil,nil;node.egc.setmode(node.egc.ALWAYS)end;function setGpioPin(c,d,e)gpio.mode(c,d)gpio.write(c,e)end
