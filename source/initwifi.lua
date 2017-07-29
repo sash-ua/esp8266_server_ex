@@ -4,6 +4,7 @@ wifi_ap_launch = function(apn)
   local ap_cnfg = sjson.decode(readFile(apn))
   ap_cnfg.auth = wifi.WPA2_PSK
   ap_cnfg.save = false
+  ap_cnfg.max = 1
   wifi.ap.config(ap_cnfg)
   ap_cnfg=nil
 end

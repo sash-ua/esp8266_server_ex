@@ -1,4 +1,4 @@
-  dofile("updateCash.lua")
+  dofile("updateCache.lua")
   dofile("decode_ws.lua")
   dofile("encode_ws.lua")
 
@@ -8,7 +8,7 @@ end
 local function ssnGen(t)
    return crypto.toHex(crypto.sha1(t.hash..t.time..node.random(100)))
 end
-local function reload(sck,t)
+local function reloadSSN(sck,t)
   sck:send(encode(sjson.encode({ssn=0, rld=1}), 0x1))
   tmr.alarm(3,t,tmr.ALARM_SINGLE,function()
     node.restart()
@@ -30,7 +30,7 @@ function server(conf)
           bffr = extra
           if payload then plws = sjson.decode(payload) end
 		  -- If session hasn't launched
-          if not plws.ssn and opcode == 1 then 
+          if not plws.ssn and opcode == 1 then
             local lpass = readFile(conf.pwdc)
             if lpass then
               if tostring(crypto.toHex(crypto.sha1(plws.hash))) == tostring(sjson.decode(lpass).pass) then
@@ -50,27 +50,27 @@ function server(conf)
             lpass=nil
           end
 		  -- If WS connection closed by browser
-          if opcode == 8 then 
+          if opcode == 8 then
             srv = nil
             collectgarbage()
 		  -- If session has launched
-          elseif plws.ssn then 
+          elseif plws.ssn then
             local rf = readFile(conf.ssnc)
             if rf then
 			  local cssn = sjson.decode(rf)
-              if plws.ssn == cssn.ssn and plws.time <= (cssn.time + conf.ssnDrtn*86400000) then                
+              if plws.ssn == cssn.ssn and plws.time <= (cssn.time + conf.ssnDrtn*86400000) then
 			    if opcode == 1 then
 			      -- Client set new Login and Password to authorize to system
-                  if plws.newhash then 
+                  if plws.newhash then
                     writeFile(conf.pwdc, {pass=crypto.toHex(crypto.sha1(plws.newhash))})
                     writeFile(conf.ssnc, {ssn=0})
-                    reload(sck, 100)
+                    reloadSSN(sck, 100)
 				  -- Client set new Login and Password for AP
-                  elseif plws.ssid and plws.pass then 
+                  elseif plws.ssid and plws.pass then
                     writeFile(conf.apc, {ssid=plws.ssid,pwd=plws.pass})
                   else
 -- Start custom section. In this section, you can set your own data handlers sent with WS.
-                    local tbd = updateCash(conf.c, sD, 'trh', payload)
+                    local tbd = updateCache(conf.c, sD, 'trh', payload)
                     if tbd then
                       sck:send(encode(tbd, 0x1));
                     else
@@ -82,7 +82,7 @@ function server(conf)
                         if buf.dp ~= sD.dp or buf.rt ~= sD.rt then
                           buf.dp = sD.dp
                           buf.rt = sD.rt
-                          tbd = updateCash(conf.c, sD)
+                          tbd = updateCache(conf.c, sD)
                           if tbd then
                             sck:send(encode(tbd, 0x1));
                           else
@@ -93,24 +93,25 @@ function server(conf)
                       end)
                     end
                   end
--- End section				  
+-- End section
                 --If browser sent ping
-				elseif opcode == 9 then 
+				elseif opcode == 9 then
                   dofile("pingpong.lua")
                   pong(sck, payload, 0xA)
                 end
               else
-                dofile("messenger.lua")
-                msg(sck, eAuth, 0x1)
+                writeFile(conf.ssnc, {ssn=0})
+                reloadSSN(sck, 100)
               end
             else
-              reload(sck, 100)
+			  writeFile(conf.ssnc, {ssn=0})
+              reloadSSN(sck, 100)
             end
           end
         end
         extra, payload, opcode, tbd,rf=nil,nil,nil,nil,nil
       end
--- End WS server	  
+-- End WS server
       local e, method, url, name, value
       _, e,method, url = pl:find("([A-Z]+) /([^?]*)%??(.*) HTTP/%d%.%d\r\n")
       if url == "" then
@@ -132,12 +133,12 @@ function server(conf)
       if url and not key then
         dofile("server_s.lua")
         if delay==1 then
-          pageHandler(sck, url)
+          pageHandler(sck, url, conf.cDrtn)
           delay = delay +1
         else
          delay = delay +1
          tmr.delay(delay*1100)
-         pageHandler(sck, url)
+         pageHandler(sck, url, conf.cDrtn)
         end
       end
     end)

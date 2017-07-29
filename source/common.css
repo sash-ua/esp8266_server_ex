@@ -38,6 +38,7 @@ input{
     overflow: hidden;
 }
 .auth{
+	box-sizing: border-box;
     text-align: center;
     display: block;
     margin: 0.5em auto 1.5em auto;
@@ -45,7 +46,7 @@ input{
 }
 .auth_view{
     opacity: 1;
-    height: 14em;
+    height: 14.5em;
 }
 .crdntl{
     text-align: right;

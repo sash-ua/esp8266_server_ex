@@ -2,7 +2,7 @@
   dofile("am2320.lua")
   dofile("managerGpio.lua")
   dofile("handlerTRH.lua")
-  --dofile("_ds18b20.lua")
+--  dofile("_ds18b20.lua")
 --local function ds18b20()
 --  return getTemp(7)
 --end

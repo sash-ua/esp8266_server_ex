@@ -1,6 +1,6 @@
-## Example app. with stable working HTTP web-server with data exchange through WebSockets (further WS) and authorisation system for Espressif ESP8266.
+## Example app. with working HTTP web-server with data exchange through WebSockets (further WS) and authorisation system for Espressif ESP8266.
 
-We know that this microcontroller (further MC) has very small heap (in this case ~41400 bytes) and stable HTTP web-server can't be created. 
+We know that this microcontroller (further MC) has very small heap (in our case ~41400 bytes) and stable HTTP web-server can't be created. 
 But if we use some solution and tricks we can.
 
 #### Postulate.
